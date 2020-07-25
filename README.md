@@ -25,6 +25,8 @@ Features
 ** when a button is pressed
 ** when a button is released
 ** or when a button changes (i.e. pressing or releasing)
+** repeated press (i.e. when the button is kept pressed for a long time, like on a computer keyboard)
+** long press
 
 Requirements
 ------------
@@ -92,6 +94,16 @@ Returns true whenever the button is pressed or released, i.e., its position is t
 
 **bool read()**
 Returns the current debounced state of the button, i.e. Button::PRESSED or Button::RELEASED.
+
+**void set_repeat(int16_t delay_ms, int16_t repeat_ms)**
+Set the repeated press timer: `delay_ms` specifies the time in milliseconds after before the first repeated press event, and `repeat_ms` specifies the time in milliseconds between subsequent events. You can set `delay_ms` to -1 to disable repeated press event (that's also the default), and similarly, set `repeat_ms`
+to -1 to disable subsequent press event. This way you can detect a long press, but not repeated press events.
+
+**uint16_t repeat_count()**
+Returns the number of repeated press event since the button was last `pressed()`. When the button is first pressed, this method will return 0, and then the
+number will increment by 1 for any repeated press event. You can also read the `repeat_count()` value after the button is `released()`, and then react 
+differently in case of a short press vs a long press. Note that you need to call `set_repeat()` first, otherwise repeated pressed will not be detected and 
+`repeat_count()` will always return `0`.
 
 **bool has_changed()**
 Returns whether the position/state of the button has changed after calling the previous read() function. Unlikely to be used except by Super Gurus.
