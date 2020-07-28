@@ -17,6 +17,8 @@ toggled	KEYWORD2
 pressed	KEYWORD2
 released	KEYWORD2
 has_changed	KEYWORD2
+repeat_count	KEYWORD2
+set_repeat	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
