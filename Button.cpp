@@ -21,6 +21,11 @@ void Button::begin()
 	pinMode(_pin, INPUT_PULLUP);
 }
 
+void Button::begin(void (*on_change_callback)(void))
+{
+	_on_change_callback = on_change_callback;
+}
+
 // 
 // public methods
 // 
@@ -39,6 +44,7 @@ bool Button::read()
 		_ignore_until = millis() + _delay;
 		_state = !_state;
 		_has_changed = true;
+		if (_on_change_callback != nullptr) _on_change_callback();
 	}
 	
 	return _state;

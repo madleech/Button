@@ -13,6 +13,7 @@ class Button
 	public:
 		Button(uint8_t pin, uint16_t debounce_ms = 100);
 		void begin();
+		void begin(void (*)(void));
 		bool read();
 		bool toggled();
 		bool pressed();
@@ -23,6 +24,7 @@ class Button
 		const static bool RELEASED = HIGH;
 	
 	private:
+		void (*_on_change_callback)(void);
 		uint8_t  _pin;
 		uint16_t _delay;
 		bool     _state;

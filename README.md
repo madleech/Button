@@ -20,6 +20,7 @@ Features
 * Super simple API.
 * Handles debouncing.
 * Sets the pin mode automatically.
+* On change callback for event-driven code.
 * Lets you write code that triggers:
 ** based on the pin state (high or low)
 ** when a button is pressed
@@ -81,6 +82,9 @@ Creates a new Button.
 **void begin()**
 Call this in your `setup` method to setup the button. All it does is set the correct pin mode.
 
+**void begin(void ((void (*on_change_callback)(void))**
+Call this in your `setup` method to setup the button. All it does is set the correct pin mode. This also adds a callback fuinction you define as a paramter that executes when the button state changes if you fancy event-driven code.
+
 **bool pressed()**
 Returns true when _and only when_ the button is pressed. Until the button is released (in the debounced-sense of the word) this function won't return true again. So in effect, it returns true only while you are pressing the button, or to put it another way, it fires on a rising edge.
 
@@ -112,4 +116,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
