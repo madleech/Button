@@ -4,7 +4,7 @@ Button button1(2); // Connect your button between pin 2 and GND
 
 void onChange()
 {
-    if (button3.read() == Button::PRESSED)
+    if (button1.read() == Button::PRESSED)
         Serial.println("Button 3 has been pressed");
     else
         Serial.println("Button 3 has been released");
@@ -15,5 +15,5 @@ void setup() {
 }
 
 void loop () {
-    //Other code...
+    button1.read();
 }
