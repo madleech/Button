@@ -117,6 +117,35 @@ void test_custom_debounce_time(void)
 	TEST_ASSERT_TRUE(button.released());
 }
 
+// Debouncing stays correct across the 32-bit millis() rollover (~49 days).
+void test_debounce_survives_millis_wraparound(void)
+{
+	Button button(2, 100);
+
+	// Prime with a normal press so _ignore_until tracks recent activity, the way
+	// it always does in real operation (never far behind millis()).
+	_mock_millis = 0x7FFFFFFF;
+	_mock_pin_state = LOW;
+	TEST_ASSERT_TRUE(button.pressed());
+
+	// Release at the very top of the range: the debounce deadline (millis + 100)
+	// overflows and wraps to a tiny value (~99).
+	_mock_millis = 0xFFFFFFFF;
+	_mock_pin_state = HIGH;
+	TEST_ASSERT_TRUE(button.released());
+
+	// A bounce at the same (large) millis is still inside the debounce window,
+	// even though the deadline has wrapped to a small number. The old absolute
+	// comparison (deadline > millis) would wrongly treat the window as expired
+	// and let this bounce through.
+	_mock_pin_state = LOW;
+	TEST_ASSERT_FALSE(button.pressed());
+
+	// Once millis() wraps past the (wrapped) deadline, a genuine press registers.
+	_mock_millis = 0x70;
+	TEST_ASSERT_TRUE(button.pressed());
+}
+
 int main(int, char **)
 {
 	UNITY_BEGIN();
@@ -126,5 +155,6 @@ int main(int, char **)
 	RUN_TEST(test_debounce_ignores_bounce);
 	RUN_TEST(test_toggled_on_each_change);
 	RUN_TEST(test_custom_debounce_time);
+	RUN_TEST(test_debounce_survives_millis_wraparound);
 	return UNITY_END();
 }
