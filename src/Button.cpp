@@ -6,6 +6,7 @@
 
 #include "Button.h"
 #include <Arduino.h>
+#include <stdint.h>
 
 Button::Button(uint8_t pin, uint16_t debounce_ms)
     : _pin(pin), _delay(debounce_ms), _state(HIGH), _ignore_until(0), _has_changed(false)
@@ -23,8 +24,11 @@ void Button::begin()
 
 bool Button::read()
 {
-	// ignore pin changes until after this delay time
-	if (_ignore_until > millis())
+	// ignore pin changes until after this delay time. The subtraction is done
+	// in modular (wraparound-safe) arithmetic so debouncing keeps working across
+	// the ~49-day millis() rollover: a negative signed difference means we have
+	// not yet reached _ignore_until.
+	if ((int32_t)((uint32_t)millis() - _ignore_until) < 0)
 	{
 		// ignore any changes during this period
 	}
