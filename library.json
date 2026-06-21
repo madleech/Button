@@ -1,0 +1,19 @@
+{
+  "name": "Button",
+  "version": "1.2.0",
+  "description": "Button is a tiny library to make reading buttons very simple. It handles debouncing automatically, and monitoring of state.",
+  "keywords": "button, debounce, input, switch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/madleech/Button.git"
+  },
+  "authors": [
+    {
+      "name": "Michael Adams",
+      "url": "https://github.com/madleech"
+    }
+  ],
+  "license": "MIT",
+  "frameworks": "arduino",
+  "platforms": "*"
+}

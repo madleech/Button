@@ -12,6 +12,7 @@ Button	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
+begin	KEYWORD2
 read	KEYWORD2
 toggled	KEYWORD2
 pressed	KEYWORD2
