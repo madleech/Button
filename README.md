@@ -75,8 +75,8 @@ void loop() {
 
 Documentation
 -------------
-**Button(int pin)**
-Creates a new Button.
+**Button(int pin, int debounce_ms = 100)**
+Creates a new Button attached a specified pin. If you need to, you can specify the debounce time as a second parameter. If left out, it defaults to 100ms.
 
 **void begin()**
 Call this in your `setup` method to setup the button. All it does is set the correct pin mode.
