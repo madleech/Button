@@ -11,6 +11,7 @@ Button::Button(uint8_t pin, uint16_t debounce_ms)
 :  _pin(pin)
 ,  _delay(debounce_ms)
 ,  _state(HIGH)
+,  _debounce_state(_state)
 ,  _ignore_until(0)
 ,  _has_changed(false)
 {
@@ -27,21 +28,20 @@ void Button::begin()
 
 bool Button::read()
 {
-	// ignore pin changes until after this delay time
-	if (_ignore_until > millis())
+	// monitor pin changes during debounce time 
+	if (digitalRead(_pin) != _state)
 	{
-		// ignore any changes during this period
-	}
-	
-	// pin has changed 
-	else if (digitalRead(_pin) != _state)
-	{
-		_ignore_until = millis() + _delay;
 		_state = !_state;
-		_has_changed = true;
+		_ignore_until = millis() + _delay;
+	}
+	// if no changes in debounce time, the button state stable, update value
+	else if (_ignore_until > millis())
+	{
+		_has_changed = (_debounce_state != _state);
+		_debounce_state = _state;
 	}
 	
-	return _state;
+	return _debounce_state;
 }
 
 // has the button been toggled from on -> off, or vice versa
