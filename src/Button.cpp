@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 Button::Button(uint8_t pin, uint16_t debounce_ms)
-    : _pin(pin), _delay(debounce_ms), _state(HIGH), _ignore_until(0), _has_changed(false)
+    : _pin(pin), _delay(debounce_ms), _state(HIGH), _ignore_start(0), _has_changed(false)
 {
 }
 
@@ -24,11 +24,11 @@ void Button::begin()
 
 bool Button::read()
 {
-	// ignore pin changes until after this delay time. The subtraction is done
-	// in modular (wraparound-safe) arithmetic so debouncing keeps working across
-	// the ~49-day millis() rollover: a negative signed difference means we have
-	// not yet reached _ignore_until.
-	if ((int32_t)((uint32_t)millis() - _ignore_until) < 0)
+	// ignore pin changes for _delay ms after the last accepted change. Elapsed
+	// time is measured with unsigned (modular) subtraction, so debouncing stays
+	// correct across the ~49-day millis() rollover and can never soft-lock: the
+	// ignore window is only ever _delay milliseconds wide.
+	if ((uint32_t)(millis() - _ignore_start) < _delay)
 	{
 		// ignore any changes during this period
 	}
@@ -36,7 +36,7 @@ bool Button::read()
 	// pin has changed
 	else if (digitalRead(_pin) != _state)
 	{
-		_ignore_until = millis() + _delay;
+		_ignore_start = millis();
 		_state = !_state;
 		_has_changed = true;
 	}

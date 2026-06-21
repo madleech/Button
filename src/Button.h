@@ -26,7 +26,7 @@ class Button
 	uint8_t _pin;
 	uint16_t _delay;
 	bool _state;
-	uint32_t _ignore_until;
+	uint32_t _ignore_start;
 	bool _has_changed;
 };
 
