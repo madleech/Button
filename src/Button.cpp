@@ -1,18 +1,14 @@
 /*
-	Button - a small library for Arduino to handle button debouncing
-	
-	MIT licensed.
+    Button - a small library for Arduino to handle button debouncing
+
+    MIT licensed.
 */
 
 #include "Button.h"
 #include <Arduino.h>
 
 Button::Button(uint8_t pin, uint16_t debounce_ms)
-:  _pin(pin)
-,  _delay(debounce_ms)
-,  _state(HIGH)
-,  _ignore_until(0)
-,  _has_changed(false)
+    : _pin(pin), _delay(debounce_ms), _state(HIGH), _ignore_until(0), _has_changed(false)
 {
 }
 
@@ -21,9 +17,9 @@ void Button::begin()
 	pinMode(_pin, INPUT_PULLUP);
 }
 
-// 
+//
 // public methods
-// 
+//
 
 bool Button::read()
 {
@@ -32,15 +28,15 @@ bool Button::read()
 	{
 		// ignore any changes during this period
 	}
-	
-	// pin has changed 
+
+	// pin has changed
 	else if (digitalRead(_pin) != _state)
 	{
 		_ignore_until = millis() + _delay;
 		_state = !_state;
 		_has_changed = true;
 	}
-	
+
 	return _state;
 }
 
