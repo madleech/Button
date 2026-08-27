@@ -25,10 +25,13 @@ class Button
 	const static bool RELEASED = HIGH;
 
   private:
-	uint8_t _pin;
-	uint16_t _delay;
-	bool _state;
+	// ordered largest-first so the struct packs without alignment padding on
+	// 32-bit targets (12 bytes instead of 16; no effect on 8-bit AVR, which is
+	// unaligned and always 9 bytes)
 	uint32_t _ignore_start;
+	uint16_t _delay;
+	uint8_t _pin;
+	bool _state;
 	bool _has_changed;
 };
 

@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 Button::Button(uint8_t pin, uint16_t debounce_ms)
-    : _pin(pin), _delay(debounce_ms), _state(HIGH), _ignore_start(0), _has_changed(false)
+    : _ignore_start(0), _delay(debounce_ms), _pin(pin), _state(HIGH), _has_changed(false)
 {
 }
 
