@@ -17,6 +17,8 @@ class Button
 	bool toggled();
 	bool pressed();
 	bool released();
+	bool pressed_for(uint32_t duration_ms);
+	uint32_t held_time();
 	bool has_changed();
 
 	const static bool PRESSED = LOW;

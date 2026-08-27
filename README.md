@@ -25,6 +25,7 @@ Features
 ** when a button is pressed
 ** when a button is released
 ** or when a button changes (i.e. pressing or releasing)
+** when a button has been held down for a length of time
 
 Requirements
 ------------
@@ -35,7 +36,7 @@ Installation
 ------------
 Download the ZIP archive (https://github.com/madleech/Button/zipball/master), then open the Arduino IDE and choose Sketch > Include Library > Add .ZIP Library... and select your downloaded file.
 
-You should now see in File > Examples > Button entires for the basic\_usage example.
+You should now see in File > Examples > Button entires for the basic\_usage and hold\_button examples.
 
 Code Examples
 -------------
@@ -73,6 +74,25 @@ void loop() {
 }
 ```
 
+And here is a snippet from the 'hold\_button' example, which toggles the built-in LED whenever the button is held down for a second. The full example also reports how long the button has been held for using `held_time()`:
+
+```C++
+void loop() {
+    // Toggle the LED each time the button is held for a full second.
+    // pressed_for() is level-triggered, so we latch it to act once per hold.
+    if (button.pressed_for(1000)) {
+        if (!hold_handled) {
+            led_on = !led_on;
+            digitalWrite(LED, led_on ? HIGH : LOW);
+            Serial.println(led_on ? "LED on" : "LED off");
+            hold_handled = true;
+        }
+    } else {
+        hold_handled = false; // re-arm once released
+    }
+}
+```
+
 Documentation
 -------------
 **Button(int pin, int debounce_ms = 100)**
@@ -86,6 +106,12 @@ Returns true when _and only when_ the button is pressed. Until the button is rel
 
 **bool released()**
 Like `pressed()`, but round the other way. So if you hold down a button, and then release it... that is when it fires.
+
+**bool pressed_for(uint32_t duration_ms)**
+Returns true while the button has been held down continuously for at least `duration_ms` milliseconds. Unlike `pressed()`, this is _level-triggered_: it keeps returning true on every call for as long as you keep the button held past the threshold. If you want to act only once per hold (e.g. toggle something), latch the result — see the `hold_button` example. Great for "press and hold for one second to..." style interactions.
+
+**uint32_t held_time()**
+Returns how many milliseconds the button has been continuously pressed for, or `0` if it isn't currently pressed. Handy if you want to react to the length of a hold rather than a fixed threshold.
 
 **bool toggled()**
 Returns true whenever the button is pressed or released, i.e., its position is toggled. To find out what the position actually is, you can use the `read()` function.

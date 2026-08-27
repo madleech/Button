@@ -73,3 +73,25 @@ bool Button::released()
 {
 	return (read() == RELEASED && has_changed());
 }
+
+// how long (ms) the button has been continuously in its current pressed state,
+// or 0 if it is not currently pressed. _ignore_start holds the time of the last
+// accepted transition, so while pressed it doubles as the press timestamp.
+// Elapsed time uses unsigned (modular) subtraction, so it is correct across the
+// ~49-day millis() rollover.
+uint32_t Button::held_time()
+{
+	if (read() != PRESSED)
+	{
+		return 0;
+	}
+	return (uint32_t)(millis() - _ignore_start);
+}
+
+// is the button currently pressed and has it been held for at least duration_ms.
+// Level triggered: stays true for every call while the button remains held past
+// the threshold, so callers that want a one-shot should latch the edge.
+bool Button::pressed_for(uint32_t duration_ms)
+{
+	return (read() == PRESSED && held_time() >= duration_ms);
+}
