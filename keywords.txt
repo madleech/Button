@@ -17,6 +17,8 @@ read	KEYWORD2
 toggled	KEYWORD2
 pressed	KEYWORD2
 released	KEYWORD2
+pressed_for	KEYWORD2
+held_time	KEYWORD2
 has_changed	KEYWORD2
 
 #######################################
